@@ -1,0 +1,25 @@
+*, *::before, *::after {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+.Navigation-list {
+  padding: 1rem;
+  background-color: #161616;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  list-style: none;
+}
+
+.Navigation-links {
+  background-color: inherit;
+  color:inherit;
+  text-decoration: none;
+  padding: 2rem;
+}
+
