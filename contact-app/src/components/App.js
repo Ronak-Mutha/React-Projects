@@ -1,57 +1,43 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import './App.css';
-//import Header from './Header';
-//import AddContact from './AddContact';
-//import ContactList from './ContactList';
+import Header from './Header';
+import AddContact from './AddContact';
+import ContactList from './ContactList';
 
-class App extends Component {
+export default function App() {
+    const LOCAL_STORAGE_KEY = "contacts";
+    const [ contacts, setContacts ] = useState([]);
 
-constructor(props) {
-   super(props);
+    const addContactHandler = (contact) => {
+        console.log(contact);
+        setContacts([...contacts, { id: uuidv4(), ...contact }]);
+    };
 
-   this.state = {
-       msg: 'Click Me'
-   }
+    const removeContactHandler = (id) => {
+        console.log(id);
+        const newContactList = contacts.filter((contact) => {
+            return contact.id !== id;
+        });
 
-   this.handleClick = this.handleClick.bind(this);
+        setContacts(newContactList);
+    };
+
+    useEffect( () => {
+        const retrieveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+        if( retrieveContacts ) setContacts(retrieveContacts);
+    } , []);
+
+    useEffect( () => {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
+    } , [contacts]);
+    
+    return(
+    <div className = "ui container">
+        <Header />
+        <AddContact addContactHandler = { addContactHandler } />
+        <ContactList contacts = { contacts } getContactId = { removeContactHandler } />
+
+    </div>
+ );
 }
-
-handleClick() {
-    console.log('clicked');
-    this.setState({msg: 'I was clicked'})
- }
-
-render() {
-   return(
-       <div>
-           <p> THis is parent.</p>
-           <p onClick={this.handleClick}> {this.state.msg} </p>
-           <Child name={this.props.name} />
-       </div>
-   );
-}
-}
-
-App.defaultProps = {
-name: ["ronak", "pranav", "anil"]
-};
-
-class Child extends Component {
-render(){
-return(
- <div>
-   <h2> This is child component</h2> 
-   <ul>
-       {
-       this.props.name.map( (item, i) => {
-           return <li>{item}</li> 
-                  })
-       }
-   </ul>
- </div>
-);
-}
-}
-
-
-export default App;
