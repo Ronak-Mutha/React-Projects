@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router";
 
-const AddContact = (props) => {
-    const [contact, setContact] = useState({name: '', phone:'', email:''});
+const EditContact = (props) => {
+    const history = useHistory();
+    console.log(props);
+    const { id, name, phone, email } = props.location.state.contact;
+    const [contact, setContact] = useState({id, name, phone, email});
     
-    const add = (e) => {
+    const update = (e) => {
         e.preventDefault();
         if(contact.name === "" || contact.phone === "" || contact.email === "") {
             alert("Please fill all the fields.");
             return;
         }
         console.log(contact);
-        props.addContactHandler(contact);
+        props.updateContactHandler(contact);
         setContact({name: '', phone:'', email:''});
+        history.push("/");
 
     };
 
     return(
         <div className="ui main">
-            <h2>Add Contact</h2>
-            <form className = "ui form" onSubmit={add}>
+            <h2>Edit Contact</h2>
+            <form className = "ui form" onSubmit={update}>
                 <div className="field">
                     <label>Name</label>
                     <input 
@@ -51,10 +56,10 @@ const AddContact = (props) => {
                         onChange={(e) => setContact({...contact, email: e.target.value})}
                     />
                 </div>
-                <button className="ui button blue">Add Contact</button>
+                <button className="ui button blue">Update Contact</button>
             </form>
       </div>
     );
 };
 
-export default AddContact;
+export default EditContact;
